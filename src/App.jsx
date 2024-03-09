@@ -7,7 +7,9 @@ function App() {
     return (
         <div className="layout-wrapper">
             <Header />
-            <ImageAnalyzer />
+            <div className="image-analyzer">
+                <ImageAnalyzer />
+            </div>
             <Footer />
         </div>
     );

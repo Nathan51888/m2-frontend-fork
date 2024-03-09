@@ -1,7 +1,8 @@
 .imageAnalyzerWrapper {
     border: 3px solid #2c7bc4;
-    margin: 2rem auto;
+    margin: auto;
     border-radius: 10px;
+    padding: 1rem;
 }
 .imageAnalyzerWrapper form {
     display: flex;
@@ -23,8 +24,18 @@
     font-size: 1rem;
     cursor: pointer;
 }
-.spin {
-    font-size: 3.5rem;
 
-    /* TODO  ANIMATION LOADING*/
+.spin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 2.5rem;
+    color: #2c7bc4;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }

@@ -9,21 +9,40 @@ export default function ImageAnalyzer() {
     const [analysis, setAnalysis] = useState();
     const [loading, setLoading] = useState(false);
 
+    const [guideMsg, setGuideMsg] = useState('Please pick a photo of your car and we will do the rest.');
+
     const setFileHandler = e => {
+        const filesCheckArr = ['image/png', 'image/jpg', 'image/jpeg'];
+        if (!e.target.files) return;
+        if (!filesCheckArr.includes(e.target.files[0].type)) {
+            // Guard clause for wrong file type
+            return setGuideMsg('Wrong file type. Please choose a jpg or png file.');
+        }
+
         if (e.target.files) {
-            console.log(e.target.files[0]);
             setFile(e.target.files[0]);
             setDisplayedImg(URL.createObjectURL(e.target.files[0]));
+            setAnalysis();
+            setGuideMsg();
         }
     };
 
     const uploadFileHandler = e => {
         e.preventDefault();
         if (!file) return;
+
+        // Reset Results and Messages
+        setAnalysis();
+        setGuideMsg();
+
+        // Set off Loading Spinning Wheel
         setLoading(true);
+
+        // Convert image to formData => Necessary to pass image from frontend to backend
         const formData = new FormData();
         formData.append('car-image', file);
 
+        // Send image and get result
         fetch('http://localhost:4000/analyse-car-image', {
             method: 'POST',
             body: formData,
@@ -31,7 +50,7 @@ export default function ImageAnalyzer() {
             .then(res => res.json())
             .then(res => {
                 setAnalysis(res);
-                setLoading(false);
+                setLoading(false); // After result, turn off loading spinning wheel
             })
             .catch(err => console.error(err));
     };
@@ -44,8 +63,13 @@ export default function ImageAnalyzer() {
                     <input type="file" onChange={setFileHandler} />
                     {displayedImg && <button onClick={uploadFileHandler}>Analyse My Options</button>}
                 </form>
-                {loading && <IoReloadCircleOutline className={style.spin} />}
-                {analysis && <Analysis data={analysis} />}
+                {loading && (
+                    <div className={style.spin}>
+                        <IoReloadCircleOutline />
+                    </div>
+                )}
+                {analysis && <Analysis data={analysis} setGuideMsg={setGuideMsg} />}
+                <p>{guideMsg}</p>
             </div>
         </>
     );

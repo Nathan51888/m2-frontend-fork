@@ -3,6 +3,11 @@ import style from './Analysis.module.css';
 
 export default function Analysis(props) {
     if (!props) return;
+    if (props.data.error) {
+        props.setGuideMsg(props.data.error);
+        return <></>;
+    }
+
     const {brand, model, similar_cars} = props.data;
     const alternatives = similar_cars.map((car, i) => <p key={`car-key-${i}`}>{car}</p>);
 
