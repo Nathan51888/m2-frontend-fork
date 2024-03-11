@@ -12,19 +12,25 @@ export default function ImageAnalyzer() {
     const [guideMsg, setGuideMsg] = useState('Please pick a photo of your car and we will do the rest.');
 
     const setFileHandler = e => {
+        // Array with allowed file types.
         const filesCheckArr = ['image/png', 'image/jpg', 'image/jpeg'];
-        if (!e.target.files) return;
-        if (!filesCheckArr.includes(e.target.files[0].type)) {
+
+        const file = e.target.files[0];
+
+        // Guard Clauses
+        if (!file) return;
+        if (!filesCheckArr.includes(file.type)) {
             // Guard clause for wrong file type
             return setGuideMsg('Wrong file type. Please choose a jpg or png file.');
         }
 
-        if (e.target.files) {
-            setFile(e.target.files[0]);
-            setDisplayedImg(URL.createObjectURL(e.target.files[0]));
-            setAnalysis();
-            setGuideMsg();
-        }
+        // Set File and Image displayed upon upload.
+        setFile(file);
+        setDisplayedImg(URL.createObjectURL(file));
+
+        // Clear Info before next analysis
+        setAnalysis();
+        setGuideMsg();
     };
 
     const uploadFileHandler = e => {
