@@ -7,9 +7,8 @@ function SimilarCars(props) {
         return <></>;
     }
 
-    const {test} = props.data;
-    //const similarCars = test.map((car, i) => <p key={`car-key-${i}`}>{car}</p>);
-    const similarCars = <p>{test}</p>;
+    const response = props.data;
+    const similarCars = response.map((car, i) => <p key={`car-key-${i}-instock`}>{`${car.brand} ${car.model} ${car.year}`}</p>);
 
   return (
     <div>
