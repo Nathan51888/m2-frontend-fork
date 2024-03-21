@@ -1,7 +1,8 @@
 import style from './ImageAnalyzer.module.css';
-import {IoReloadCircleOutline} from 'react-icons/io5';
+import { IoReloadCircleOutline } from 'react-icons/io5';
 import Analysis from './Analysis';
-import {useState} from 'react';
+import { useState } from 'react';
+import SimilarCars from './SimilarCars';
 
 export default function ImageAnalyzer() {
     const [displayedImg, setDisplayedImg] = useState();
@@ -9,7 +10,20 @@ export default function ImageAnalyzer() {
     const [analysis, setAnalysis] = useState();
     const [loading, setLoading] = useState(false);
 
+    // set after analysis has been done
+    const [similarCars, setSimilarCars] = useState();
+
     const [guideMsg, setGuideMsg] = useState('Please pick a photo of your car and we will do the rest.');
+
+    function getSimilarCars(brand) {
+        fetch(`http://localhost:4000/get-similar-cars-instock?brand=${brand}`)
+            .then(res => res.json())
+            .then(res => {
+                setSimilarCars(res);
+                setLoading(false);
+            })
+            .catch(err => console.error(err));
+    }
 
     const setFileHandler = e => {
         // Array with allowed file types.
@@ -57,6 +71,7 @@ export default function ImageAnalyzer() {
             .then(res => {
                 setAnalysis(res);
                 setLoading(false); // After result, turn off loading spinning wheel
+                getSimilarCars(res.brand)
             })
             .catch(err => console.error(err));
     };
@@ -76,6 +91,18 @@ export default function ImageAnalyzer() {
                 )}
                 {analysis && <Analysis data={analysis} setGuideMsg={setGuideMsg} />}
                 <p>{guideMsg}</p>
+                {similarCars && (
+                    <>
+                        <h3>Similar cars in stock:</h3>
+                        <SimilarCars data={similarCars} setGuideMsg={setGuideMsg} />
+                        {loading && (
+                            <div className={style.spin}>
+                                <IoReloadCircleOutline />
+                            </div>
+                        )}
+                    </>
+                )
+                }
             </div>
         </>
     );
