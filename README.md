@@ -1,3 +1,5 @@
-# Frontend for Mission Ready - Mission 2
+# Frontend for Mission Ready - Mission 4
 
-[Mission 2 Repo](https://github.com/T-Tavares/mission-2)
+This is a fork of my teammate thiago's frontend repo: [Mission 2 Repo](https://github.com/T-Tavares/mission-2)
+
+I've added displays for similar cars instock that are fetched from the backend.
